@@ -18,11 +18,11 @@ private:
 	string _str;
 };
 
-String() {}
+String::String() {}
 
-String(const char* str) : _str(str) {}
+String::String(const char* str) : _str(str) {}
 
-String(const string& str) : _str(str) {}
+String::String(const string& str) : _str(str) {}
 
 }
 

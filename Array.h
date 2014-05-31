@@ -2,8 +2,9 @@
 
 #define CAVASCRIPT_ARRAY_H
 
+#include "Object.h"
 #include "String.h"
-#include <cstdarg.h>
+#include <cstdarg>
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -13,18 +14,21 @@ using namespace std;
 namespace cavascript {
 
 template<class T>
-class Array : class Object {
+class Array : public Object {
 public:
 	Array();
 	explicit Array(int i);
 	Array(const char* list);
 	~Array();
 
+	// Member fields
+	int length;
+
 	// Member functions
-	Array<T> concat(Array<T>& another) const;
-	int indexOf() const;
-	String join() const;
-	int lastIndexOf() const;
+	Array<T> concat(const Array<T>& another) const;
+	int indexOf(const T& x) const;
+	String join(const char& separator = ',') const;
+	int lastIndexOf(const T& x) const;
 	T& pop();
 	int push(T e);
 	void reverse();
@@ -36,21 +40,21 @@ public:
 	int unshift();
 	Array<T>& valueOf() const;
 
+	// Interfaces
+	typename vector<T>::iterator _begin() const {
+		return _arr.begin();
+	}
+	typename vector<T>::iterator _end() const {
+		return _arr.end();
+	}
+
 	// Operators
 	T& operator[](int i) const {
 		return _arr.at(i);
 	}
-	void operator()(...) {
+	//void operator()(...) {
 
-	}
-
-	// Interfaces
-	vector<T>::iterator begin() {
-		return _arr.begin();
-	}
-	vector<T>::iterator end() {
-		return _arr.end();
-	}
+	//}
 
 private:
 	Array(vector<T> arr);
@@ -58,10 +62,10 @@ private:
 };
 
 template<class T>
-Array<T>::Array() {}
+Array<T>::Array() : length(0) {}
 
 template<class T>
-Array<T>::Array(int i) : _arr(i) {}
+Array<T>::Array(int i) : _arr(i), length(i) {}
 
 template<class T>
 Array<T>::Array(const char* list) {
@@ -69,16 +73,16 @@ Array<T>::Array(const char* list) {
 }
 
 template<class T>
-Array<T>::Array(const <T> arr) : _arr(arr) {}
+Array<T>::Array(const vector<T> arr) : _arr(arr), length(arr.size()) {}
 
 template<class T>
 Array<T>::~Array() {}
 
 template<class T>
-Array<T> concat(const Array<T>& another) const {
+Array<T> Array<T>::concat(const Array<T>& another) const {
 	vector<T> res = _arr;
-	res.insert(res.end(), another.begin(), another.end());
-	return res;
+	res.insert(res.end(), another._begin(), another._end());
+	return Array<T>(res);
 }
 
 template<class T>
@@ -106,6 +110,12 @@ int Array<T>::lastIndexOf(const T& x) const {
 			break;
 	}
 	return r_iter == _arr.rend() ? -1 : _arr.rend() - r_iter - 1;
+}
+
+template<class T>
+int Array<T>::push(T e) {
+	_arr.push_back(e);
+	return ++length;
 }
 
 }

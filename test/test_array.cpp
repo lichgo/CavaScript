@@ -1,10 +1,32 @@
-#include "../Array.h"
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+#include "Array.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 using namespace cavascript;
 
-void test_array() {
-	Array<int> arr;
-	arr(1, 2, 3, 4);
+namespace UnitTest
+{
+	TEST_CLASS(UnitTestArray)
+	{
+	public:
+		Array<int> arr;
 
-	arr
+		TEST_METHOD(length)
+		{
+			Assert::AreEqual(arr.length, 0);
+		}
+
+		TEST_METHOD(indexOf)
+		{
+			arr.push(1);
+			arr.push(2);
+			arr.push(3);
+
+			Assert::AreEqual(arr.indexOf(2), 1);
+		}
+
+	};
 }
