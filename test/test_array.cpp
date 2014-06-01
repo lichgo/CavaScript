@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
-#include "Array.h"
+#include "CavaArray.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

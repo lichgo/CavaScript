@@ -1,4 +1,4 @@
-#include "Array.h"
+#include "CavaArray.h"
 #include <iostream>
 
 using namespace cavascript;

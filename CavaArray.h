@@ -2,8 +2,8 @@
 
 #define CAVASCRIPT_ARRAY_H
 
-#include "Object.h"
-#include "String.h"
+#include "CavaObject.h"
+#include "CavaString.h"
 #include <cstdarg>
 #include <vector>
 #include <string>

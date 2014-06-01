@@ -4,8 +4,6 @@
 
 namespace cavascript {
 
-class String;
-
 class Object {
 public:
 	Object() {}
