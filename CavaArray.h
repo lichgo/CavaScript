@@ -4,12 +4,10 @@
 
 #include "CavaObject.h"
 #include "CavaString.h"
-#include <cstdarg>
 #include <vector>
 #include <string>
 #include <algorithm>
-
-#include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -36,10 +34,10 @@ public:
 	void reverse();
 	T shift();
 	Array<T> slice(int start, int end);
-	//Array<T> splice(int start, int length, ...);
+	Array<T> splice(int start, int len);
 	void sort();
 	String toString() const;
-	int unshift(T x, ...);
+	int unshift(T x);
 	Array<T>& valueOf() const;
 
 	// Interfaces
@@ -95,13 +93,13 @@ int Array<T>::indexOf(const T& x) const {
 
 template<class T>
 String Array<T>::join(const char& separator = ',') const {
-	string str;
+	ostringstream oss;
 	for (vector<T>::const_iterator iter = _arr.begin(); iter != _arr.end(); ++iter) {
-		str.append(*iter);
-		if (iter != _arr.end() - 1)
-			str.append(separator);
+		oss << *iter;
+		if (iter != _arr.end() - 1 && separator != '\0')
+			oss << separator;
 	}
-	return new String(str);
+	return String(oss.str());
 }
 
 template<class T>
@@ -147,7 +145,12 @@ Array<T> Array<T>::slice(int start, int end) {
 	return Array<T>(res);
 }
 
-//Array<T> splice(int start, int length, ...);
+template<class T>
+Array<T> Array<T>::splice(int start, int len) {
+	vector<T> res(_arr.begin() + start, _arr.begin() + start + len);
+	_arr.erase(_arr.begin() + start, _arr.begin() + start + len);
+	return Array<T>(res);
+}
 
 template<class T>
 void Array<T>::sort() {
@@ -160,25 +163,9 @@ String Array<T>::toString() const {
 }
 
 template<class T>
-int Array<T>::unshift(T x, ...) {
-	int pos = 0;
-
-	_arr.insert(_arr.begin() + (pos++), x);
-
-	va_list argp;
-	va_start(argp, x);
-
-	T t;
-	while (( t = va_arg(argp, T) ) != 0) {
-		printf("%d\t", t);
-		_arr.insert(_arr.begin() + (pos++), t);
-	}
-	
-	va_end(argp);
-
-	length += pos;
-
-	return length;
+int Array<T>::unshift(T x) {
+	_arr.insert(_arr.begin(), x);
+	return ++length;
 }
 
 template<class T>

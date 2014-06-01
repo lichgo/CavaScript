@@ -2,15 +2,17 @@
 
 #define CAVASCRIPT_OBJECT_H
 
+#include <string>
+
 namespace cavascript {
 
 class Object {
 public:
 	Object() {}
 	virtual ~Object() {}
-	//virtual Object toString() {
-	//	return String("Object");
-	//}
+	virtual std::string toString() {
+		return std::string("Object");
+	}
 };
 
 }
