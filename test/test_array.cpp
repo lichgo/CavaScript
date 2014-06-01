@@ -14,18 +14,24 @@ namespace UnitTest
 	public:
 		Array<int> arr;
 
-		TEST_METHOD(length)
+		TEST_METHOD(Array)
 		{
 			Assert::AreEqual(arr.length, 0);
-		}
 
-		TEST_METHOD(indexOf)
-		{
 			arr.push(1);
 			arr.push(2);
 			arr.push(3);
+			arr.push(1);
 
 			Assert::AreEqual(arr.indexOf(2), 1);
+
+			Assert::AreEqual(arr.lastIndexOf(1), 3);
+
+			arr.unshift(0);
+
+			Assert::AreEqual(arr[0], 0);
+
+			Assert::AreEqual(arr.length, 5);
 		}
 
 	};

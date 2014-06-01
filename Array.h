@@ -9,6 +9,8 @@
 #include <string>
 #include <algorithm>
 
+#include <iostream>
+
 using namespace std;
 
 namespace cavascript {
@@ -29,15 +31,15 @@ public:
 	int indexOf(const T& x) const;
 	String join(const char& separator = ',') const;
 	int lastIndexOf(const T& x) const;
-	T& pop();
+	T pop();
 	int push(T e);
 	void reverse();
-	T& shift();
+	T shift();
 	Array<T> slice(int start, int end);
 	//Array<T> splice(int start, int length, ...);
 	void sort();
 	String toString() const;
-	int unshift();
+	int unshift(T x, ...);
 	Array<T>& valueOf() const;
 
 	// Interfaces
@@ -49,7 +51,7 @@ public:
 	}
 
 	// Operators
-	T& operator[](int i) const {
+	T& operator[](int i) {
 		return _arr.at(i);
 	}
 	//void operator()(...) {
@@ -104,8 +106,8 @@ String Array<T>::join(const char& separator = ',') const {
 
 template<class T>
 int Array<T>::lastIndexOf(const T& x) const {
-	vector<T>::reverse_iterator r_iter;
-	for (r_iter = _arr.rbegin(); r_iter != _arr.rend(); ++r_iter) {
+	vector<T>::const_reverse_iterator r_iter = _arr.rbegin();
+	for (; r_iter != _arr.rend(); ++r_iter) {
 		if (*r_iter == x)
 			break;
 	}
@@ -116,6 +118,72 @@ template<class T>
 int Array<T>::push(T e) {
 	_arr.push_back(e);
 	return ++length;
+}
+
+template<class T>
+T Array<T>::pop() {
+	T res = _arr.back;
+	_arr.pop_back();
+	--length;
+	return res;
+}
+
+template<class T>
+void Array<T>::reverse() {
+	reverse(_arr.begin(), _arr.end());
+}
+
+template<class T>
+T Array<T>::shift() {
+	T res = _arr.front;
+	_arr.erase(0);
+	--length;
+	return res;
+}
+
+template<class T>
+Array<T> Array<T>::slice(int start, int end) {
+	vector<T> res(_arr.begin() + start, _arr.begin() + end);
+	return Array<T>(res);
+}
+
+//Array<T> splice(int start, int length, ...);
+
+template<class T>
+void Array<T>::sort() {
+	sort(_arr.begin(), _arr.end());
+}
+
+template<class T>
+String Array<T>::toString() const {
+	return join();
+}
+
+template<class T>
+int Array<T>::unshift(T x, ...) {
+	int pos = 0;
+
+	_arr.insert(_arr.begin() + (pos++), x);
+
+	va_list argp;
+	va_start(argp, x);
+
+	T t;
+	while (( t = va_arg(argp, T) ) != 0) {
+		printf("%d\t", t);
+		_arr.insert(_arr.begin() + (pos++), t);
+	}
+	
+	va_end(argp);
+
+	length += pos;
+
+	return length;
+}
+
+template<class T>
+Array<T>& Array<T>::valueOf() const {
+	return *this;
 }
 
 }
