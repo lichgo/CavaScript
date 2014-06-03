@@ -22,7 +22,7 @@ public:
 	~Array();
 
 	// Member fields
-	int length;
+	unsigned int length;
 
 	// Member functions
 	Array<T> concat(const Array<T>& another) const;
@@ -40,21 +40,10 @@ public:
 	int unshift(T x);
 	Array<T>& valueOf() const;
 
-	// Interfaces
-	typename vector<T>::iterator _begin() const {
-		return _arr.begin();
-	}
-	typename vector<T>::iterator _end() const {
-		return _arr.end();
-	}
-
 	// Operators
 	T& operator[](int i) {
 		return _arr.at(i);
 	}
-	//void operator()(...) {
-
-	//}
 
 private:
 	Array(vector<T> arr);
@@ -81,7 +70,7 @@ Array<T>::~Array() {}
 template<class T>
 Array<T> Array<T>::concat(const Array<T>& another) const {
 	vector<T> res = _arr;
-	res.insert(res.end(), another._begin(), another._end());
+	res.insert(res.end(), another._arr.begin(), another._arr.end());
 	return Array<T>(res);
 }
 
@@ -171,6 +160,19 @@ int Array<T>::unshift(T x) {
 template<class T>
 Array<T>& Array<T>::valueOf() const {
 	return *this;
+}
+
+// String::split (rely on Array)
+Array<String> String::split(const char& separator) const {
+	Array<String> arr;
+	size_t start = 0;
+	size_t found = _str.find_first_of(separator, start);
+	while (found != string::npos) {
+		arr.push(substring(start, found));
+		start = found + 1;
+		found = _str.find_first_of(separator, start);
+	}
+	return arr;
 }
 
 }
